@@ -81,6 +81,9 @@ class _AddPageState extends State<AddPage> {
     await db.collection('todos').add(data);
     nameValue.clear();
     descriptionValue.clear();
-    print("Data added");
+    // ignore: use_build_context_synchronously
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Record successfully added!"),
+    ));
   }
 }
