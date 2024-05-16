@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AddPage extends StatefulWidget {
-  const AddPage({
+class EditPage extends StatefulWidget {
+  const EditPage({
     super.key,
     required this.initFunc,
+    required this.id,
+    required this.name,
+    required this.description,
   });
   final Function() initFunc;
+  final String id;
+  final String name;
+  final String description;
 
   @override
-  State<AddPage> createState() => _AddPageState();
+  State<EditPage> createState() => _EditPageState();
 }
 
-class _AddPageState extends State<AddPage> {
+class _EditPageState extends State<EditPage> {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final formkey = GlobalKey<FormState>();
@@ -21,7 +27,7 @@ class _AddPageState extends State<AddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo Add'),
+        title: const Text('Todo Edit'),
       ),
       body: Center(
         child: Padding(
@@ -31,7 +37,7 @@ class _AddPageState extends State<AddPage> {
             child: Column(
               children: [
                 TextFormField(
-                  controller: nameController,
+                  controller: nameController..text = widget.name,
                   decoration:
                       const InputDecoration(hintText: "Enter Your Name"),
                   validator: (value) {
@@ -45,7 +51,7 @@ class _AddPageState extends State<AddPage> {
                   height: 20,
                 ),
                 TextFormField(
-                  controller: descriptionController,
+                  controller: descriptionController..text = widget.description,
                   decoration:
                       const InputDecoration(hintText: "Enter Description"),
                   validator: (value) {
@@ -64,9 +70,9 @@ class _AddPageState extends State<AddPage> {
                     if (!isValid) {
                       return;
                     }
-                    saveData(nameController, descriptionController);
+                    updateData(nameController, descriptionController);
                   },
-                  child: const Text('Save'),
+                  child: const Text('Update'),
                 ),
               ],
             ),
@@ -76,18 +82,18 @@ class _AddPageState extends State<AddPage> {
     );
   }
 
-  Future<void> saveData(final nameValue, final descriptionValue) async {
+  Future<void> updateData(final nameValue, final descriptionValue) async {
     final db = FirebaseFirestore.instance;
     final Map<String, dynamic> data = {
       'name': nameValue.text,
       'description': descriptionValue.text,
     };
-    await db.collection('todos').add(data);
+    await db.collection('todos').doc(widget.id).update(data);
     nameValue.clear();
     descriptionValue.clear();
     // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("Record successfully added!"),
+      content: Text("Record successfully updated!"),
     ));
     widget.initFunc();
   }
