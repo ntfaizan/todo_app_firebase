@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_firebase/pages/add_page.dart';
 import 'package:todo_app_firebase/pages/edit_page.dart';
+import 'package:todo_app_firebase/pages/login_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -41,6 +43,15 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => AddPage(initFunc: initData)));
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.power),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              // ignore: use_build_context_synchronously
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const LoginPage()));
             },
           ),
         ],

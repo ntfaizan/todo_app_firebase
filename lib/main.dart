@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_firebase/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:todo_app_firebase/pages/login_page.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: const LoginPage(),
     );
   }
 }
